@@ -35,3 +35,5 @@ task wrapper(type: Wrapper) {
 }
 
 task stage(dependsOn: ['clean', 'installApp', 'build'])
+
+mainClassName = "com.jcs.todomvc.Application"
