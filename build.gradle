@@ -34,6 +34,6 @@ task wrapper(type: Wrapper) {
     gradleVersion = '1.11'
 }
 
-task stage(dependsOn: ['clean', 'installApp', 'build'])
+task stage(dependsOn: ['build'])
 
 mainClassName = "com.jcs.todomvc.Application"
