@@ -1,1 +1,1 @@
-web: java -jar build/libs/todo-backend-0.1.0.jar -Dserver.port=$PORT
+web: java -jar build/libs/todo-backend-0.1.0.jar 
