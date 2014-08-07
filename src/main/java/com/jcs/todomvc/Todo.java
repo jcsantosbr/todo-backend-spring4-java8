@@ -18,4 +18,21 @@ public class Todo {
     public void setTitle(String title) {
         this.title = title;
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Todo todo = (Todo) o;
+
+        if (!title.equals(todo.title)) return false;
+
+        return true;
+    }
+
+    @Override
+    public int hashCode() {
+        return title.hashCode();
+    }
 }
