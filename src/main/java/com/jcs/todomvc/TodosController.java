@@ -21,7 +21,7 @@ public class TodosController {
     }
 
     @RequestMapping(value = "/todos",
-            method = RequestMethod.POST,
+            method = {RequestMethod.POST, RequestMethod.OPTIONS },
             headers = {"Content-type=application/json"})
     public Todo saveTodo(@RequestBody Todo todo) {
         todos.add(todo);
