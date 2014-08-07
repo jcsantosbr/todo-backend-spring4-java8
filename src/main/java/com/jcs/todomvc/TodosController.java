@@ -1,9 +1,6 @@
 package com.jcs.todomvc;
 
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.PostConstruct;
 import java.util.ArrayList;
@@ -23,8 +20,10 @@ public class TodosController {
         return todos;
     }
 
-    @RequestMapping(value = "/todos", method = RequestMethod.POST)
-    public Todo saveTodo(Todo todo) {
+    @RequestMapping(value = "/todos",
+            method = RequestMethod.POST,
+            headers = {"Content-type=application/json"})
+    public Todo saveTodo(@RequestBody Todo todo) {
         todos.add(todo);
         return todo;
     }

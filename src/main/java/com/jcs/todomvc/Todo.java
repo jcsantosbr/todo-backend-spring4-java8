@@ -2,7 +2,10 @@ package com.jcs.todomvc;
 
 public class Todo {
 
-    private final String title;
+    private String title;
+
+    public Todo() {
+    }
 
     public Todo(String title) {
         this.title = title;
@@ -10,5 +13,9 @@ public class Todo {
 
     public String getTitle() {
         return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
     }
 }
