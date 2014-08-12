@@ -2,8 +2,10 @@ package com.jcs.todomvc;
 
 public class Todo {
 
+    private int id;
     private String title;
     private Boolean completed;
+    private Integer order;
 
     public Todo() {
     }
@@ -12,9 +14,11 @@ public class Todo {
         this.title = title;
     }
 
-    public Todo(String title, Boolean completed) {
+    public Todo(int id, String title, Boolean completed, Integer order) {
+        this.id = id;
         this.title = title;
         this.completed = completed;
+        this.order = order;
     }
 
     public String getTitle() {
@@ -32,14 +36,14 @@ public class Todo {
 
         Todo todo = (Todo) o;
 
-        if (!title.equals(todo.title)) return false;
+        if (id != todo.id) return false;
 
         return true;
     }
 
     @Override
     public int hashCode() {
-        return title.hashCode();
+        return id;
     }
 
     public boolean isCompleted() {
@@ -50,8 +54,27 @@ public class Todo {
         this.completed = completed;
     }
 
+    public int getOrder() {
+        return nonNull(order, 0);
+    }
+
+    public void setOrder(Integer order) {
+        this.order = order;
+    }
+
     public Todo merge(Todo newTodo) {
-        return new Todo( nonNull(newTodo.title, this.title), nonNull(newTodo.completed, this.completed)  );
+        return new Todo(id,
+                nonNull(newTodo.title, title),
+                nonNull(newTodo.completed, completed),
+                nonNull(newTodo.order, order));
+    }
+
+    public long getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 
     private <T> T nonNull(T value, T defaultValue) {
