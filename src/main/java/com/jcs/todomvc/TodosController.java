@@ -10,7 +10,7 @@ import java.util.List;
 import static java.util.Arrays.asList;
 
 @RestController
-@RequestMapping(value = "/todos", headers = {"Content-type=application/json"})
+@RequestMapping(value = "/todos")
 public class TodosController {
 
     private List<Todo> todos = new ArrayList<Todo>();
@@ -20,13 +20,13 @@ public class TodosController {
         return todos;
     }
 
-    @RequestMapping(method = RequestMethod.POST)
+    @RequestMapping(method = RequestMethod.POST,  headers = {"Content-type=application/json"})
     public Todo saveTodo(@RequestBody Todo todo) {
         todos.add(todo);
         return todo;
     }
 
-    @RequestMapping(method = RequestMethod.DELETE)
+    @RequestMapping(method = RequestMethod.DELETE, headers = {"Content-type=application/json"})
     public void deleteTodo(@RequestBody Todo todo) {
         todos.remove(todo);
     }
