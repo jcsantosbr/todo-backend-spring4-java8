@@ -3,6 +3,7 @@ package com.jcs.todomvc;
 public class Todo {
 
     private String title;
+    private boolean completed;
 
     public Todo() {
     }
@@ -34,5 +35,13 @@ public class Todo {
     @Override
     public int hashCode() {
         return title.hashCode();
+    }
+
+    public boolean isCompleted() {
+        return completed;
+    }
+
+    public void setCompleted(boolean completed) {
+        this.completed = completed;
     }
 }
