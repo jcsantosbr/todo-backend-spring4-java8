@@ -32,10 +32,7 @@ public class TodosController {
         if (!todoOptional.isPresent())
             return new ResponseEntity<ResourceWithUrl>(HttpStatus.NOT_FOUND);
 
-        Todo todo = todoOptional.get();
-        ResourceWithUrl<Todo> resource = new ResourceWithUrl<>(todo, getHref(todo));
-
-        return new ResponseEntity<ResourceWithUrl>(resource, HttpStatus.CREATED);
+        return respondeWithResource(todoOptional.get(), HttpStatus.OK);
     }
 
     private String getHref(Todo todo) {
@@ -46,9 +43,13 @@ public class TodosController {
     public HttpEntity<ResourceWithUrl> saveTodo(@RequestBody Todo todo) {
         todos.add(todo);
 
+        return respondeWithResource(todo, HttpStatus.CREATED);
+    }
+
+    private HttpEntity<ResourceWithUrl> respondeWithResource(Todo todo, HttpStatus statusCode) {
         ResourceWithUrl resourceWithUrl = new ResourceWithUrl(todo, getHref(todo));
 
-        return new ResponseEntity<ResourceWithUrl>(resourceWithUrl, HttpStatus.CREATED);
+        return new ResponseEntity<>(resourceWithUrl, statusCode);
     }
 
     @RequestMapping(method = RequestMethod.DELETE)

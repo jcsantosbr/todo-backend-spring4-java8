@@ -11,6 +11,9 @@ public class ResourceWithUrl<T> {
     private T content;
     private String url;
 
+    public ResourceWithUrl() {
+    }
+
     public ResourceWithUrl(T content, String url) {
         this.content = content;
         this.url = url;
