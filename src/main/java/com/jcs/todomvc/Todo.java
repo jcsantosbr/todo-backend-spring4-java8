@@ -3,13 +3,18 @@ package com.jcs.todomvc;
 public class Todo {
 
     private String title;
-    private boolean completed;
+    private Boolean completed;
 
     public Todo() {
     }
 
     public Todo(String title) {
         this.title = title;
+    }
+
+    public Todo(String title, Boolean completed) {
+        this.title = title;
+        this.completed = completed;
     }
 
     public String getTitle() {
@@ -38,10 +43,18 @@ public class Todo {
     }
 
     public boolean isCompleted() {
-        return completed;
+        return nonNull(completed,false);
     }
 
     public void setCompleted(boolean completed) {
         this.completed = completed;
+    }
+
+    public Todo merge(Todo newTodo) {
+        return new Todo( nonNull(newTodo.title, this.title), nonNull(newTodo.completed, this.completed)  );
+    }
+
+    private <T> T nonNull(T value, T defaultValue) {
+        return value == null ? defaultValue : value;
     }
 }

@@ -11,11 +11,8 @@ import java.util.stream.Stream;
 
 import static org.springframework.hateoas.mvc.ControllerLinkBuilder.linkTo;
 import static org.springframework.hateoas.mvc.ControllerLinkBuilder.methodOn;
-import static org.springframework.http.HttpStatus.CREATED;
-import static org.springframework.http.HttpStatus.NOT_FOUND;
-import static org.springframework.http.HttpStatus.OK;
-import static org.springframework.web.bind.annotation.RequestMethod.GET;
-import static org.springframework.web.bind.annotation.RequestMethod.POST;
+import static org.springframework.http.HttpStatus.*;
+import static org.springframework.web.bind.annotation.RequestMethod.*;
 
 @RestController
 @RequestMapping(value = "/todos")
@@ -32,7 +29,7 @@ public class TodosController {
     @RequestMapping(value = "/{todo-title}", method = GET)
     public HttpEntity<ResourceWithUrl> getTodo(@PathVariable("todo-title") String title ) {
 
-        Optional<Todo> todoOptional = todos.stream().filter(todo -> todo.getTitle().equals(title)).findFirst();
+        Optional<Todo> todoOptional = tryToFindByTitle(title);
 
         if (!todoOptional.isPresent())
             return new ResponseEntity<>(NOT_FOUND);
@@ -40,8 +37,8 @@ public class TodosController {
         return respondeWithResource(todoOptional.get(), OK);
     }
 
-    private String getHref(Todo todo) {
-        return linkTo( methodOn(this.getClass()).getTodo(todo.getTitle()) ).withSelfRel().getHref();
+    private Optional<Todo> tryToFindByTitle(String title) {
+        return todos.stream().filter(todo -> todo.getTitle().equals(title)).findFirst();
     }
 
     @RequestMapping(method = POST,  headers = {"Content-type=application/json"})
@@ -51,19 +48,41 @@ public class TodosController {
         return respondeWithResource(todo, CREATED);
     }
 
-    private HttpEntity<ResourceWithUrl> respondeWithResource(Todo todo, HttpStatus statusCode) {
-        ResourceWithUrl resourceWithUrl = toResource(todo);
+    @RequestMapping(method = DELETE)
+    public void deleteAllTodos() {
+        todos.clear();
+    }
 
-        return new ResponseEntity<>(resourceWithUrl, statusCode);
+    @RequestMapping(value = "/{todo-title}",method = PATCH,  headers = {"Content-type=application/json"})
+    public HttpEntity<ResourceWithUrl> updateTodo(@PathVariable("todo-title") String title, @RequestBody Todo newTodo ) {
+        Optional<Todo> todoOptional = tryToFindByTitle(title);
+
+        if ( !todoOptional.isPresent() ) {
+            return new ResponseEntity<>(NOT_FOUND);
+        } else if ( newTodo == null ) {
+            return new ResponseEntity<>(BAD_REQUEST);
+        }
+
+        todos.remove(todoOptional.get());
+
+        Todo mergedTodo = todoOptional.get().merge(newTodo);
+        todos.add(mergedTodo);
+
+        return respondeWithResource(mergedTodo, OK);
+    }
+
+
+    private String getHref(Todo todo) {
+        return linkTo( methodOn(this.getClass()).getTodo(todo.getTitle()) ).withSelfRel().getHref();
     }
 
     private ResourceWithUrl toResource(Todo todo) {
         return new ResourceWithUrl(todo, getHref(todo));
     }
 
-    @RequestMapping(method = RequestMethod.DELETE)
-    public void deleteAllTodos() {
-        todos.clear();
-    }
+    private HttpEntity<ResourceWithUrl> respondeWithResource(Todo todo, HttpStatus statusCode) {
+        ResourceWithUrl resourceWithUrl = toResource(todo);
 
+        return new ResponseEntity<>(resourceWithUrl, statusCode);
+    }
 }
