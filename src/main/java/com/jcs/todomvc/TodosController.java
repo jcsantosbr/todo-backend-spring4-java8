@@ -26,9 +26,9 @@ public class TodosController {
         return todo;
     }
 
-    @RequestMapping(method = RequestMethod.DELETE, headers = {"Content-type=application/json"})
-    public void deleteTodo(@RequestBody Todo todo) {
-        todos.remove(todo);
+    @RequestMapping(method = RequestMethod.DELETE)
+    public void deleteAllTodos() {
+        todos.clear();
     }
 
 
