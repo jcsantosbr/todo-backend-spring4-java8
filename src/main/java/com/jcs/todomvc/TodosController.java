@@ -53,6 +53,15 @@ public class TodosController {
         todos.clear();
     }
 
+    @RequestMapping(value = "/{todo-title}",method = DELETE)
+    public void deleteOneTodo(@PathVariable("todo-title") String title) {
+        Optional<Todo> todoOptional = tryToFindByTitle(title);
+
+        if ( todoOptional.isPresent() ) {
+            todos.remove(todoOptional.get());
+        }
+    }
+
     @RequestMapping(value = "/{todo-title}",method = PATCH,  headers = {"Content-type=application/json"})
     public HttpEntity<ResourceWithUrl> updateTodo(@PathVariable("todo-title") String title, @RequestBody Todo newTodo ) {
         Optional<Todo> todoOptional = tryToFindByTitle(title);
